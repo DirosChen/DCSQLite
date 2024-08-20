@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.github.dcendents.android-maven") version("2.1") apply(false)
 }
 
 android {
@@ -34,14 +35,10 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.4")
     implementation("com.fasterxml.jackson.core:jackson-core:2.13.4")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4")
     implementation("com.google.guava:guava:33.2.1-jre")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     implementation(kotlin("reflect"))
 }
