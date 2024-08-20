@@ -102,14 +102,14 @@ db.useDB<Unit> { SQL.runNativeSQL(NATIVE_READ)}
 ### 事务
 ```
 db.useDB<Long> {
-transaction( Student(name = "Super Man", age = 36, sex = "man") insertTo T_STUDENT,
-Book(666, "The C Program", 55.55) insertTo T_BOOK,
-"name" to "Super Girl" updateTo T_STUDENT whereAnd ("id" to 1))
+   transaction( Student(name = "Super Man", age = 36, sex = "man") insertTo T_STUDENT,
+      Book(666, "The C Program", 55.55) insertTo T_BOOK,
+      "name" to "Super Girl" updateTo T_STUDENT whereAnd ("id" to 1))
 }
 
 db.useDB<Long> {
-listOf("aaa", "bbb").forTransaction {i, t ->
-"name" to t updateTo T_STUDENT whereAnd ("id" to "${i+1}")
-}
+   listOf("aaa", "bbb").forTransaction {i, t ->
+   "name" to t updateTo T_STUDENT whereAnd ("id" to "${i+1}")
+   }
 }
 ```
