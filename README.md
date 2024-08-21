@@ -3,6 +3,18 @@
 一个简单的android下的sqlite库，100%用kotlin实现。
 
 ## 依赖
+
+```
+implementation 'com.github.DirosChen:DCSQLite:1.0.4'
+```
+
+settings.gradle
+
+```
+maven { url 'https://www.jitpack.io' }
+```
+
+库中使用到的第三方依赖(也需要添加)
 ```
 implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.4")
 implementation("com.fasterxml.jackson.core:jackson-core:2.13.4")
