@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.org.eclipse.jgit.lib.InflaterCache.release
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -23,6 +25,19 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            register("release", MavenPublication::class) {
+                from(components["release"])
+                groupId = "com.dirosc"
+                artifactId = "sqlite"
+                version = "1.0.0"
+            }
+        }
     }
 }
 
