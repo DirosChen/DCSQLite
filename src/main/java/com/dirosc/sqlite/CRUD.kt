@@ -232,19 +232,19 @@ class CRUD(val write: SQLiteDatabase, val read: SQLiteDatabase) {
             var id = write.insertWithOnConflict(param.table, null, it, param.conflict)
             ids.add(id)
         }
-        cache.cleanUp()
+        cache.invalidateAll()
         return ids as List<T>
     }
 
     @Suppress("UNCHECKED_CAST")
     inline fun<reified T> execDelete(param: Param.Delete): List<T> {
-        cache.cleanUp()
+        cache.invalidateAll()
         return listOf(write.delete(param.table, param.statement, arrayOf()).toLong()) as List<T>
     }
 
     @Suppress("UNCHECKED_CAST")
     inline fun<reified T> execUpdate(param: Param.Update): List<T>  {
-        cache.cleanUp()
+        cache.invalidateAll()
         return listOf(write.update(param.table, param.contentValues, param.statement, arrayOf()).toLong()) as List<T>
     }
 
