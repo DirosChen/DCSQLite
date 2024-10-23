@@ -13,12 +13,15 @@ import androidx.core.database.getStringOrNull
 import com.dirosc.sqlite.ann.Column
 import com.dirosc.sqlite.ann.Table
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.google.common.cache.CacheBuilder
 import kotlinx.coroutines.sync.Semaphore
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
 sealed class Param {
@@ -180,7 +183,7 @@ class CRUD(val write: SQLiteDatabase, val read: SQLiteDatabase) {
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
-                        T::class.java.declaredFields.forEach {
+                        T::class.java.declaredFields.forEach { it ->
                             it.isAccessible = true
                             try {
                                 it.getAnnotation(Column::class.java)?.run {
@@ -199,7 +202,12 @@ class CRUD(val write: SQLiteDatabase, val read: SQLiteDatabase) {
                                             cursor.getStringOrNull(index)?.run {
                                                 if(json) {
                                                     try {
-                                                        it.set(obj, objectMapper.readValue(this, it.type))
+                                                        if(it.genericType is ParameterizedType) {
+                                                            var ptype = (it.genericType as ParameterizedType).actualTypeArguments.map {m-> m as Class<*> }.toTypedArray()
+                                                            it.set(obj, objectMapper.readValue(this, objectMapper.typeFactory.constructParametricType(it.type, *ptype)))
+                                                        } else {
+                                                            it.set(obj, objectMapper.readValue(this, it.type))
+                                                        }
                                                     } catch (e: Exception) {
                                                         e.printStackTrace()
                                                     }
