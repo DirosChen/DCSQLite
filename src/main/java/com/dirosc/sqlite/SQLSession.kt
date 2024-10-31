@@ -67,7 +67,7 @@ class Session(val context: Context, val path: String, val version: Long, val cac
                     p0?.execSQL("create table IF NOT EXISTS $it")
                 }
                 alters?.forEach {
-                    var alter = "alter table ${it.table} ${it.way} column ${it.column} ${it.type}"
+                    var alter = "alter table ${it.table} ${it.way} column ${it.column} ${it.type} ${if(!it.value.isNullOrEmpty()) "default ${it.value}" else ""}"
                     Log.d(TAG, "alters:$alter")
                     var exist = false
                     try {

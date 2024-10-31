@@ -30,7 +30,7 @@ sealed class Param {
     data class Insert(var table: String, var contentValues: List<ContentValues>, var conflict: Int = SQLiteDatabase.CONFLICT_REPLACE): Param()
     data class Delete(var table: String, var statement: String? = null): Param()
     data class Native(var sql: String, var wr: Int): Param()
-    data class Alter(var table: String, var way: String, var type: String? = null, var column: String): Param()
+    data class Alter(var table: String, var way: String, var type: String? = null, var column: String, var value: String? = null): Param()
     data class Transaction(var cruds: Array<out Param>): Param()
 }
 
@@ -160,6 +160,7 @@ class CRUD(val write: SQLiteDatabase, val read: SQLiteDatabase) {
                    var map = mutableMapOf<String, Any?>()
                    for(i in 0 until cursor.columnCount) {
                        var columnName = cursor.getColumnName(i)
+                       //Log.d("CRUD", "columnName:${columnName}")
                        when(cursor.getType(i)) {
                            Cursor.FIELD_TYPE_NULL -> map[columnName] = null
                            Cursor.FIELD_TYPE_INTEGER -> map[columnName] = cursor.getLongOrNull(i)
@@ -189,15 +190,15 @@ class CRUD(val write: SQLiteDatabase, val read: SQLiteDatabase) {
                                 it.getAnnotation(Column::class.java)?.run {
                                     var index = cursor.getColumnIndex(this.value)
                                     var json = this.json
-                                    //Log.i(TAG, "type:${it.type.simpleName}")
+                                    //Log.i("CRUD", "type:${it.type.simpleName}")
                                     when(it.type.simpleName.lowercase()) {
-                                        "int" -> it.set(obj, cursor.getIntOrNull(index))
-                                        "long" -> it.set(obj, cursor.getLongOrNull(index))
+                                        "int", "Integer" -> it.set(obj, cursor.getIntOrNull(index))
+                                        "long", "Long" -> it.set(obj, cursor.getLongOrNull(index))
                                         "String" -> it.set(obj, cursor.getStringOrNull(index))
                                         "byte[]" -> it.set(obj, cursor.getBlobOrNull(index))
                                         "byte" -> it.set(obj, cursor.getIntOrNull(index))
-                                        "double" -> it.set(obj, cursor.getDoubleOrNull(index))
-                                        "float" -> it.set(obj, cursor.getFloatOrNull(index))
+                                        "double", "Double" -> it.set(obj, cursor.getDoubleOrNull(index))
+                                        "float", "Float" -> it.set(obj, cursor.getFloatOrNull(index))
                                         else -> {
                                             cursor.getStringOrNull(index)?.run {
                                                 if(json) {

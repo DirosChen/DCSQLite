@@ -1,7 +1,5 @@
 package com.dirosc.sqlite
 
-import android.util.Log
-
 infix fun Pair<String, Any?>.selectTo(query: String): Param.Select {
     return mapOf(this).selectTo(query)
 }
@@ -15,14 +13,15 @@ infix fun Map<String, Any?>.selectTo(query: String): Param.Select {
             is List<*> -> (it.value as List<*>).joinToString(",")
             else -> it.value.toString()
         }
-        Log.i("TestDB", "before:$before   after=$after ")
+        //Log.i("TestDB", "before:$before   after=$after ")
         queryStr = queryStr.replace(before, after)
     }
-    Log.i("TestDB", "query: $query   queryStr=$queryStr")
+    //Log.i("TestDB", "query: $query   queryStr=$queryStr")
     return Param.Select(queryStr)
 }
 
-fun String.select(): Param.Select {
+fun String.select(vararg column: String): Param.Select {
     require(this != null)
-    return Param.Select("select * from $this")
+
+    return Param.Select("select ${if(column.isNullOrEmpty()) "*" else column.joinToString(",")} from $this")
 }

@@ -7,3 +7,7 @@ infix fun String.addColumn(column: String): Param.Alter {
 infix fun Param.Alter.type(type: String): Param.Alter {
     return this.apply { this.type = type }
 }
+
+infix fun Param.Alter.default(value: String): Param.Alter {
+    return this.apply { this.value = value }
+}

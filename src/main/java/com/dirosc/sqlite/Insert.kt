@@ -78,11 +78,11 @@ infix fun Map<String, Any?>.insertTo(table: String): Param.Insert {
     this.forEach {
         if(it.value != null) {
             when(it.value!!::class.simpleName) {
-                "int" -> contentValues.put(it.key, it.value as Int)
-                "long" -> contentValues.put(it.key, it.value as Long)
-                "double" -> contentValues.put(it.key, it.value as Double)
+                "int", "Integer" -> contentValues.put(it.key, it.value as Int)
+                "long", "Long" -> contentValues.put(it.key, it.value as Long)
+                "double", "Double" -> contentValues.put(it.key, it.value as Double)
                 "String" -> contentValues.put(it.key, it.value as String)
-                "float" -> contentValues.put(it.key, it.value as Float)
+                "float", "Float" -> contentValues.put(it.key, it.value as Float)
                 "byte" -> contentValues.put(it.key, it.value as Byte)
                 "byte[]" -> contentValues.put(it.key, it.value as ByteArray)
                 else -> contentValues.put(it.key, it.value.toString())
